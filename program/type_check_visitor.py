@@ -7,11 +7,29 @@ class TypeCheckVisitor(SimpleLangVisitor):
   def visitMulDiv(self, ctx: SimpleLangParser.MulDivContext):
     left_type = self.visit(ctx.expr(0))
     right_type = self.visit(ctx.expr(1))
-    
+
+    if ctx.op.text == '%':
+        if isinstance(left_type, IntType) and isinstance(right_type, IntType):
+            return IntType()
+        else:
+            raise TypeError("Unsupported operand types for %: {} and {}".format(left_type, right_type))
+
     if isinstance(left_type, (IntType, FloatType)) and isinstance(right_type, (IntType, FloatType)):
         return FloatType() if isinstance(left_type, FloatType) or isinstance(right_type, FloatType) else IntType()
     else:
         raise TypeError("Unsupported operand types for * or /: {} and {}".format(left_type, right_type))
+
+  def visitEq(self, ctx: SimpleLangParser.EqContext):
+    left_type = self.visit(ctx.expr(0))
+    right_type = self.visit(ctx.expr(1))
+
+    both_numeric = isinstance(left_type, (IntType, FloatType)) and isinstance(right_type, (IntType, FloatType))
+    same_type = type(left_type) == type(right_type)
+
+    if both_numeric or same_type:
+        return BoolType()
+    else:
+        raise TypeError("Unsupported operand types for ==: {} and {}".format(left_type, right_type))
 
   def visitAddSub(self, ctx: SimpleLangParser.AddSubContext):
     left_type = self.visit(ctx.expr(0))

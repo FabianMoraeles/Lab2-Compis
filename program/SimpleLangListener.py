@@ -80,6 +80,15 @@ class SimpleLangListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by SimpleLangParser#Eq.
+    def enterEq(self, ctx:SimpleLangParser.EqContext):
+        pass
+
+    # Exit a parse tree produced by SimpleLangParser#Eq.
+    def exitEq(self, ctx:SimpleLangParser.EqContext):
+        pass
+
+
     # Enter a parse tree produced by SimpleLangParser#Int.
     def enterInt(self, ctx:SimpleLangParser.IntContext):
         pass
